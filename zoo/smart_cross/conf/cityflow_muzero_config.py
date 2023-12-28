@@ -3,13 +3,13 @@ from easydict import EasyDict
 # ==============================================================
 # begin of the most frequently changed config specified by the user
 # ==============================================================
-collector_env_num = 1
+collector_env_num = 8
 n_episode = 8
-evaluator_env_num = 1
+evaluator_env_num = 8
 num_simulations = 25
 update_per_collect = 100
 batch_size = 256
-max_env_step = int(1e3)
+max_env_step = int(1e5)
 reanalyze_ratio = 0
 # # ==============================================================
 # end of the most frequently changed config specified by the user
@@ -19,14 +19,15 @@ smartcross_muzero_config = dict(
     exp_name=f'data_mz_ctree/smartcross_muzero_ns{num_simulations}_upc{update_per_collect}_rr{reanalyze_ratio}_seed0',
     env=dict(
         config_path='/home/qi/Workspace/github/DI-smartcross/smartcross/envs/cityflow_grid/cityflow_auto_grid_config.json',
-        obs_type=['phase'],
+        # obs_type=['phase'],
+        obs_type=['phase', 'lane_vehicle_num', 'lane_waiting_vehicle_num'],
         continuous=False,
         from_discrete=True,
         manually_discretization=False,
         collector_env_num=collector_env_num,
         evaluator_env_num=evaluator_env_num,
         n_evaluator_episode=evaluator_env_num,
-        max_episode_duration=1000,
+        max_episode_duration=200,
         green_duration=30,
         yellow_duration=5,
         red_duration=0,
@@ -36,11 +37,11 @@ smartcross_muzero_config = dict(
     ),
     policy=dict(
         model=dict(
-            observation_shape=24,
-            action_space_size=24,
+            observation_shape=264,
+            action_space_size=264,
             model_type='mlp', 
-            lstm_hidden_size=128,
-            latent_state_dim=128,
+            lstm_hidden_size=256,
+            latent_state_dim=256,
             self_supervised_learning_loss=True,  # NOTE: default is False.
             discrete_action_encoding_type='one_hot',
             norm_type='BN', 
